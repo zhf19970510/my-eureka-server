@@ -1,0 +1,21 @@
+Eureka的优化策略：
+1. 不同数量服务自我保护
+2. 快速下线
+
+map<服务名, map<实例id, 实例信息>>
+ConcurrentHashMap<String, Map<String, Lease<InstanceInfo>>>
+
+优化策略见：
+application-test-eureka.yml
+
+cap
+1.三级缓存。
+2.从其他peer拉取注册表。peer。int registryCount = this.registry.syncUp()，没有满足C的地方。
+3.P:网络不好的情况下，还是可以拉取到注册表进行调用的。
+
+
+集群同步：
+1. 注册：第一个节点注册进来，null(二次true)，"true".equals 后面那个值 是"false"（二次"true")
+2. 续约：一直同步，所有集群.
+3. 下线：和2一样.
+4. 剔除：没有同步这项业务。
